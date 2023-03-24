@@ -8,12 +8,22 @@ import net.runelite.client.config.ConfigItem;
 public interface LocalTimeConfig extends Config
 {
 	@ConfigItem(
-		keyName = "rl-local-time",
-		name = "Local Time",
-		description = "The message to show to the user when they login"
+		keyName = "rl-local-time-showseconds",
+		name = "Show Seconds",
+		description = "Toggles whether or not the time should display seconds or just HH:MM"
 	)
-	default String greeting()
+	default boolean showSeconds()
 	{
-		return "Hello";
+		return true;
+	}
+
+	@ConfigItem(
+			keyName = "rl-local-time-24hr",
+			name = "Use 24hr time?",
+			description = "Toggles whether or not the time should display in 24 hrs or 12hrs"
+	)
+	default boolean use24Hr()
+	{
+		return true;
 	}
 }

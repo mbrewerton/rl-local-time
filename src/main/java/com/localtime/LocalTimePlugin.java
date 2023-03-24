@@ -9,12 +9,14 @@ import net.runelite.api.GameState;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.ui.overlay.OverlayManager;
 
 @Slf4j
 @PluginDescriptor(
-	name = "Example"
+	name = "Local Time"
 )
 public class LocalTimePlugin extends Plugin
 {
@@ -24,24 +26,31 @@ public class LocalTimePlugin extends Plugin
 	@Inject
 	private LocalTimeConfig config;
 
+	@Inject
+	private OverlayManager overlayManager;
+
+	@Inject
+	private LocalTimeOverlay localTimeOverlay;
+
 	@Override
 	protected void startUp() throws Exception
 	{
-		log.info("Example started!");
+		overlayManager.add(localTimeOverlay);
 	}
 
 	@Override
 	protected void shutDown() throws Exception
 	{
-		log.info("Example stopped!");
+		overlayManager.remove(localTimeOverlay);
 	}
 
 	@Subscribe
-	public void onGameStateChanged(GameStateChanged gameStateChanged)
+	public void onConfigChanged( ConfigChanged event )
 	{
-		if (gameStateChanged.getGameState() == GameState.LOGGED_IN)
+		if ( event.getGroup().equals( "rl-local-time" ) )
 		{
-			client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Example says " + config.greeting(), null);
+//			overlayManager.remove(localTimeOverlay);
+//			overlayManager.add(new LocalTimeOverlay(config));
 		}
 	}
 
